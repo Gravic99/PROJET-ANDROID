@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Qwikpik</string>
+    <string name="Title">Qwik Pik</string>
+    <string name="btn_TakeAPik">Take A Pik!</string>
+    <string name="btn_Gallery">Gallery</string>
+</resources>
