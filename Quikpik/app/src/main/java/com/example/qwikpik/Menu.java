@@ -18,6 +18,14 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        ColorText();
+
+        goToCameraButton = findViewById(R.id.btn_TakeAPik);
+        goToGalleryButton = findViewById(R.id.btn_Gallery);
+        setListener();
+    }
+
+    private void ColorText() {
         TextView textView = findViewById(R.id.textView_title);
         String text = "<font color=#6AEE6A>Q</font>" +
                 "<font color=#F1A247>W</font>" +
@@ -28,10 +36,6 @@ public class Menu extends AppCompatActivity {
                 "<font color=#763C76>I</font>" +
                 "<font color=#3535B9>K</font>";
         textView.setText(Html.fromHtml(text));
-
-        goToCameraButton = findViewById(R.id.btn_TakeAPik);
-        goToGalleryButton = findViewById(R.id.btn_Gallery);
-        setListener();
     }
 
     private void setListener() {

@@ -3,4 +3,5 @@
     <string name="Title">Qwik Pik</string>
     <string name="btn_TakeAPik">Take A Pik!</string>
     <string name="btn_Gallery">Gallery</string>
+    <string name="BackToMenu">Back to menu</string>
 </resources>
