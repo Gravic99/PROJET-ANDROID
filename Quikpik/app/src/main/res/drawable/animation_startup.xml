@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/qwikpik0" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik1" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik2" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik3" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik4" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik5" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik6" android:duration="500" />
+    <item android:drawable="@drawable/qwikpik7" android:duration="1000" />
+
+</animation-list>
