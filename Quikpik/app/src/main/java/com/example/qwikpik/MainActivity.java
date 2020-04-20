@@ -24,12 +24,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void StartUpAnimation() {
+        Handler handlerAnimSwitch = new Handler();
+        final Intent intentMenu = new Intent(this, Menu.class);
+
         imageView = findViewById(R.id.imageView);
         if(imageView == null) throw new AssertionError();
         imageView.setBackgroundResource(R.drawable.animation_startup);
         anim = (AnimationDrawable)imageView.getBackground();
-        Handler handlerAnimSwitch = new Handler();
-        final Intent intentMenu = new Intent(this, Menu.class);
         anim.start();
         handlerAnimSwitch.postDelayed(new Runnable() {
             @Override
@@ -37,6 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 anim.stop();
                 startActivity(intentMenu);
             }
-        },4200);
+        },4400);
     }
 }
