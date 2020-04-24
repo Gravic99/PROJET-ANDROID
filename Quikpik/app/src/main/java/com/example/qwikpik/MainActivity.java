@@ -1,6 +1,7 @@
 package com.example.qwikpik;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.qwikpik.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        startService();
         StartUpAnimation();
 
     }
@@ -39,5 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentMenu);
             }
         },4400);
+    }
+    private void startService(){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        ContextCompat.startForegroundService(this,serviceIntent);
     }
 }
