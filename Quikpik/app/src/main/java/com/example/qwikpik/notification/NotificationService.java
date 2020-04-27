@@ -72,7 +72,7 @@ public class NotificationService extends Service {
     }
 
     private void listenToPosition(){
-        //sendNotification();
+        sendNotification();
     }
 
     private void sendNotification(){
