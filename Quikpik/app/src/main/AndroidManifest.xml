@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera2" android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -28,7 +29,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.qwikpik"
+            android:authorities="com.example.qwikpik.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
                 <meta-data

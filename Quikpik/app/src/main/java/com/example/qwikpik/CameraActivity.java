@@ -28,6 +28,7 @@ public class CameraActivity extends AppCompatActivity {
     Button btn_TakePicture;
     ImageView ImageView_Picture;
     String pathToFile;
+    String photoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode,int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Toast.makeText(this,Integer.toString(requestCode), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this,Integer.toString(resultCode), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,Integer.toString(resultCode), Toast.LENGTH_SHORT).show();
 
         if(resultCode == RESULT_OK){
 
@@ -90,12 +91,13 @@ public class CameraActivity extends AppCompatActivity {
     }
     private void dispatchPictureTakeAction(){
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if(takePicture.resolveActivity(getPackageManager()) != null){
             File photoFile = null;
             photoFile = createPhotoFile();
             if(photoFile != null){
                 pathToFile = photoFile.getAbsolutePath();
-                Uri photoURI = FileProvider.getUriForFile(CameraActivity.this,"com.example.qwikpik",photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this,"com.example.qwikpik.fileprovider",photoFile);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
                 startActivityForResult(takePicture,1);
 
@@ -106,7 +108,7 @@ public class CameraActivity extends AppCompatActivity {
     }
     private File createPhotoFile() {
         String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File StorageDir = Environment.getExternalStoragePublicDirectory((Environment.DIRECTORY_PICTURES));
+        File StorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = null;
 
         try {
@@ -114,6 +116,7 @@ public class CameraActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        photoPath= image.getAbsolutePath();
     return image;
 
     }
