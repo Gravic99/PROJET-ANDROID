@@ -13,4 +13,24 @@
         android:text="@string/BackToMenu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_TakePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="@string/btn_TakePicture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_Picture"
+        android:layout_width="374dp"
+        android:layout_height="578dp"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/imageView_Picture_contentDesc"
+        app:layout_constraintBottom_toTopOf="@+id/btn_TakePicture"
+        app:layout_constraintEnd_toEndOf="@+id/btn_TakePicture"
+        app:layout_constraintStart_toStartOf="@+id/btn_TakePicture" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,6 @@
     <string name="btn_TakeAPik">Take A Pik!</string>
     <string name="btn_Gallery">Gallery</string>
     <string name="BackToMenu">Back to menu</string>
+    <string name="btn_TakePicture">Take Picture</string>
+    <string name="imageView_Picture_contentDesc">Image</string>
 </resources>
