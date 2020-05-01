@@ -72,8 +72,8 @@ public class Menu extends AppCompatActivity {
         goToGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toastify();
-                //goToActivity(GalleryActivity.class);
+                //toastify();
+                goToActivity(GalleryActivity.class);
             }
         });
         fusedLocationClient.getLastLocation()

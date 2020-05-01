@@ -46,7 +46,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode,int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Toast.makeText(this,Integer.toString(requestCode), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this,Integer.toString(resultCode), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,Integer.toString(resultCode), Toast.LENGTH_SHORT).show();
 
         if(resultCode == RESULT_OK){
 
