@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Html;
 import android.widget.TextView;
 import android.view.View;
@@ -15,14 +16,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class Menu extends AppCompatActivity {
+    LocationRequest mLocationRequest;
     Button goToGalleryButton;
     Button goToCameraButton;
-    String lat ;
-    String lon ;
+    Location currentLocation ;
+    Boolean requestingLocationUpdates;
+    TextView textView;
+    private LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -30,6 +37,7 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        textView = findViewById(R.id.REEEE);
 
         ColorText();
 
@@ -40,13 +48,46 @@ public class Menu extends AppCompatActivity {
                     Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
 
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(20000);
+        mLocationRequest.setFastestInterval(20000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        requestingLocationUpdates = true ;
 
-
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    currentLocation=location;
+                    // ...
+                }
+                textView.setText(Double.toString(currentLocation.getLatitude()) + Double.toString( currentLocation.getLongitude()));
+                toastify();
+            }
+        };
 
         goToCameraButton = findViewById(R.id.btn_TakeAPik);
         goToGalleryButton = findViewById(R.id.btn_Gallery);
         setListener();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (requestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (requestingLocationUpdates) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
     }
 
     private void ColorText() {
@@ -83,12 +124,16 @@ public class Menu extends AppCompatActivity {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             // Logic to handle location object
-                            lat = Double.toString(location.getLatitude());
-                            lon = Double.toString(location.getLongitude());
-
+                            currentLocation = location;
                         }
                     }
                 });
+    }
+
+    private void startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(mLocationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 
     private void goToActivity(Class activityToGoTo){
@@ -97,6 +142,6 @@ public class Menu extends AppCompatActivity {
     }
 
     private void toastify(){
-        Toast.makeText(this,lat+lon,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,Double.toString(currentLocation.getLatitude())+Double.toString(currentLocation.getLongitude()),Toast.LENGTH_SHORT).show();
     }
 }
