@@ -6,4 +6,6 @@
     <string name="BackToMenu">Back to menu</string>
     <string name="btn_TakePicture">Take Picture</string>
     <string name="imageView_Picture_contentDesc">Image</string>
+    <string name="name">name</string>
+    <string name="save">Save</string>
 </resources>

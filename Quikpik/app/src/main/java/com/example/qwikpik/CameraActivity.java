@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,7 +19,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -27,12 +30,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CameraActivity extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     Button backToMenuButton;
     Button btn_TakePicture;
     ImageView ImageView_Picture;
     String pathToFile;
     String photoPath;
     Location location;
+    TextView textViewName;
+    double longitude = 46.1262094;//location.getLongitude();
+    double latitude = -70.363952;//location.getLatitude();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class CameraActivity extends AppCompatActivity {
         backToMenuButton = findViewById(R.id.btn_Back);
         btn_TakePicture = findViewById(R.id.btn_TakePicture);
         ImageView_Picture = findViewById(R.id.imageView_Picture);
+        textViewName = findViewById(R.id.textViewName);
+
         requestPermission();
         setListener();
     }
@@ -49,16 +58,17 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode,int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Toast.makeText(this,Integer.toString(requestCode), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this,Integer.toString(resultCode), Toast.LENGTH_SHORT).show();
-
-        if(resultCode == RESULT_OK){
-
+        if(resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE){
             if(requestCode == 1){
+                createAndShowNameDialog();
                 Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
                 ImageView_Picture.setImageBitmap(bitmap);
             }
         }
+        else{
+             Toast.makeText(this,"no", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void requestPermission(){
@@ -97,81 +107,65 @@ public class CameraActivity extends AppCompatActivity {
             photoFile = createPhotoFile();
             if(photoFile != null){
                 pathToFile = photoFile.getAbsolutePath();
+
                // Toast.makeText(this,pathToFile, Toast.LENGTH_SHORT).show();
                 Uri photoURI = FileProvider.getUriForFile(this,"com.example.qwikpik.fileprovider",photoFile);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
                 startActivityForResult(takePicture,1);
-
-
             }
 
         }
     }
     private File createPhotoFile() {
-        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String name = new SimpleDateFormat("yyyyMMdd").format(new Date());
         File StorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = null;
-       // image.renameTo(image)
-
-       // File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES));
-        //File from      = new File(directory, "currentFileName");
-        //File to        = new File(directory, text.trim() + ".mp4");
-        //File test = new File(photoPath);
-        //from.renameTo(to);
-        //Toast.makeText(this,StorageDir.toString(), Toast.LENGTH_SHORT).show();
         try {
-            image = File.createTempFile(name,".jpg",StorageDir);
-
+            image = File.createTempFile(name,".jpeg",StorageDir);
+            photoPath= image.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        photoPath= image.getAbsolutePath();
-        //Toast.makeText(this,photoPath, Toast.LENGTH_SHORT).show();
-        double longitude = 46.1262094;//location.getLongitude();
-        double latitude = -70.363952;//location.getLatitude();
 
-       Toast.makeText(this,Double.toString(longitude), Toast.LENGTH_SHORT).show();
-       Toast.makeText(this,Double.toString(latitude), Toast.LENGTH_SHORT).show();
-        //geoTag(photoPath, latitude, longitude);
     return image;
 
     }
+    private void createAndShowNameDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.name_dialog);
 
-    public void geoTag(String filename, double latitude, double longitude){
-        ExifInterface exif;
+        Button dialogBtnSave = dialog.findViewById(R.id.btnSave);
+        Button dialogBtnCancel = dialog.findViewById(R.id.btnCancel);
 
-        try {
-            exif = new ExifInterface(filename);
-            int num1Lat = (int)Math.floor(latitude);
-            int num2Lat = (int)Math.floor((latitude - num1Lat) * 60);
-            double num3Lat = (latitude - ((double)num1Lat+((double)num2Lat/60))) * 3600000;
-
-            int num1Lon = (int)Math.floor(longitude);
-            int num2Lon = (int)Math.floor((longitude - num1Lon) * 60);
-            double num3Lon = (longitude - ((double)num1Lon+((double)num2Lon/60))) * 3600000;
-
-            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, num1Lat+"/1,"+num2Lat+"/1,"+num3Lat+"/1000");
-            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, num1Lon+"/1,"+num2Lon+"/1,"+num3Lon+"/1000");
-
-
-            if (latitude > 0) {
-                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "N");
-            } else {
-                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "S");
+        dialogBtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editTextName = dialog.findViewById(R.id.editTextName);
+                textViewName.setText(editTextName.getText());
+                renamePicture(editTextName.getText().toString());
+                dialog.dismiss();
             }
+        });
 
-            if (longitude > 0) {
-                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "E");
-            } else {
-                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "W");
+        dialogBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewName.setText("");
+                renamePicture("");
+                dialog.dismiss();
             }
+        });
+        dialog.show();
+    }
 
-            exif.saveAttributes();
-
-        } catch (IOException e) {
-            Log.e("PictureActivity", e.getLocalizedMessage());
-        }
-
+    private void renamePicture(String newName){
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File from      = new File(photoPath);
+        File to        = new File(directory, newName.trim() +
+                                "_lat:" + Double.toString(latitude) + ",lon:" +
+                                Double.toString(longitude) + ",date:" + date + ".jpeg");
+        from.renameTo(to);
     }
 
 }

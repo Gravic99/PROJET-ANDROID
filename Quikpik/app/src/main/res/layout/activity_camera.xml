@@ -26,10 +26,20 @@
 
     <ImageView
         android:id="@+id/imageView_Picture"
-        android:layout_width="374dp"
-        android:layout_height="578dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="375dp"
+        android:layout_height="551dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/imageView_Picture_contentDesc"
+        app:layout_constraintBottom_toTopOf="@+id/textViewName"
+        app:layout_constraintEnd_toEndOf="@+id/btn_TakePicture"
+        app:layout_constraintStart_toStartOf="@+id/btn_TakePicture" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_TakePicture"
         app:layout_constraintEnd_toEndOf="@+id/btn_TakePicture"
         app:layout_constraintStart_toStartOf="@+id/btn_TakePicture" />
