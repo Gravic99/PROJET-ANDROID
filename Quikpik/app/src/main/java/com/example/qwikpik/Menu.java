@@ -28,7 +28,6 @@ public class Menu extends AppCompatActivity {
     Button goToCameraButton;
     Location currentLocation ;
     Boolean requestingLocationUpdates;
-    TextView textView;
     private LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -37,7 +36,6 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        textView = findViewById(R.id.REEEE);
 
         ColorText();
 
@@ -64,8 +62,6 @@ public class Menu extends AppCompatActivity {
                     currentLocation=location;
                     // ...
                 }
-                textView.setText(Double.toString(currentLocation.getLatitude()) + Double.toString( currentLocation.getLongitude()));
-                toastify();
             }
         };
 
@@ -113,7 +109,6 @@ public class Menu extends AppCompatActivity {
         goToGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //toastify();
                 goToActivity(GalleryActivity.class);
             }
         });
@@ -141,7 +136,4 @@ public class Menu extends AppCompatActivity {
         startActivity(activityIntent);
     }
 
-    private void toastify(){
-        Toast.makeText(this,Double.toString(currentLocation.getLatitude())+Double.toString(currentLocation.getLongitude()),Toast.LENGTH_SHORT).show();
-    }
 }
