@@ -11,12 +11,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +46,7 @@ public class CameraActivity extends AppCompatActivity {
 
         backToMenuButton = findViewById(R.id.btn_Back);
         btn_TakePicture = findViewById(R.id.btn_TakePicture);
-        ImageView_Picture = findViewById(R.id.imageView_Picture);
+        ImageView_Picture = findViewById(R.id.imageView_ImageGallery);
         textViewName = findViewById(R.id.textViewName);
 
         requestPermission();
