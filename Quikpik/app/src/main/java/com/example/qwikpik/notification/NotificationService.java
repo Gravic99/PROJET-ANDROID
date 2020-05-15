@@ -9,8 +9,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.Html;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,7 +29,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class NotificationService extends Service {
@@ -35,7 +41,7 @@ public class NotificationService extends Service {
     public static final String TAG = "NotificationService";
     NotificationManager notificationManager;
     LocationRequest mLocationRequest;
-    Location currentLocation ;
+    static Location currentLocation ;
     Boolean requestingLocationUpdates;
     private LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationClient;
@@ -67,6 +73,11 @@ public class NotificationService extends Service {
         };
         setListener();
         startLocationUpdates();
+
+    }
+
+    public static Location getCurrentLocation() {
+        return  currentLocation;
     }
 
     private void setListener(){
@@ -132,31 +143,45 @@ public class NotificationService extends Service {
 
     private void listenToPosition(Location location){
         boolean notifSent=false;
-        Location[] picturePositions = new Location[2];
-        Location locate = new Location(String.valueOf(this));
-        locate.setLatitude(46.11252);
-        locate.setLongitude(-70.35586);
-        Location locate2 = new Location(String.valueOf(this));
-        locate2.setLatitude(46.11455);
-        locate2.setLongitude(-70.35786);
-        picturePositions[0] = locate;
-        picturePositions[1] = locate2;
-        for (Location position : picturePositions) {
-            if(getDistance(location, position) < 0.0005 && !notifSent){
-                sendNotification(position);
+        File[] pictures = getAllFilesInPictures();
+        Location[] picturePositions = new Location[pictures.length];
+        for (int i = 0; i < pictures.length; i++){
+            String toDecrypt = pictures[i].getName();
+            Location locate = new Location(String.valueOf(this));
+            if(!toDecrypt.contains("_lat:")) {
+                locate.setLatitude(0);
+                locate.setLongitude(0);
+            }
+            else {
+                locate.setLatitude(Double.parseDouble(toDecrypt.substring(toDecrypt.indexOf("_lat:") + 5, toDecrypt.indexOf(",lon:"))));
+                locate.setLongitude(Double.parseDouble(toDecrypt.substring(toDecrypt.indexOf(",lon:") + 5, toDecrypt.indexOf(",date:"))));
+            }
+            picturePositions[i] = locate;
+
+        }
+        for (int i = 0; i < picturePositions.length; i++) {
+            if(getDistance(location, picturePositions[i]) < 0.0005 && !notifSent){
+                sendNotification(pictures[i].getName());
                 notifSent = true;
             }
         }
+    }
+
+    private File[] getAllFilesInPictures() {
+        String path = Environment.getExternalStorageDirectory().toString()+"/Android/data/com.example.qwikpik/files/Pictures";
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        return files;
     }
 
     private double getDistance(Location location, Location position) {
         return Math.sqrt( Math.pow(location.getLatitude()-position.getLatitude(),2)+ Math.pow(location.getLongitude()-position.getLongitude(),2));
     }
 
-    private void sendNotification(Location location){
-        Notification notificationToSend = NotificationCreator.createNotificationForMessage(this,Double.toString(location.getLatitude()) +Double.toString(location.getLongitude()));
+    private void sendNotification(String pic_name){
+        Notification notificationToSend = NotificationCreator.createNotificationForMessage(this,pic_name);
         notificationManager.notify(idNotification,notificationToSend);
-        idNotification++;
+        //idNotification++;
     }
 
 
