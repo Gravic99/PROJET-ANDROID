@@ -24,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qwikpik.notification.NotificationService;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -38,14 +43,16 @@ public class CameraActivity extends AppCompatActivity {
     String photoPath;
     Location location;
     TextView textViewName;
-    double longitude = 46.1262094;//location.getLongitude();
-    double latitude = -70.363952;//location.getLatitude();
+    FusedLocationProviderClient fusedLocationClient;
+    double longitude = 0;//location.getLongitude();
+    double latitude = 0;//location.getLatitude();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         backToMenuButton = findViewById(R.id.btn_Back);
         btn_TakePicture = findViewById(R.id.btn_TakePicture);
         ImageView_Picture = findViewById(R.id.imageView_Picture);
@@ -90,6 +97,7 @@ public class CameraActivity extends AppCompatActivity {
         btn_TakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                location = NotificationService.getCurrentLocation();
                 dispatchPictureTakeAction();
             }
         });
@@ -107,8 +115,6 @@ public class CameraActivity extends AppCompatActivity {
             photoFile = createPhotoFile();
             if(photoFile != null){
                 pathToFile = photoFile.getAbsolutePath();
-
-               // Toast.makeText(this,pathToFile, Toast.LENGTH_SHORT).show();
                 Uri photoURI = FileProvider.getUriForFile(this,"com.example.qwikpik.fileprovider",photoFile);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
                 startActivityForResult(takePicture,1);
@@ -162,6 +168,10 @@ public class CameraActivity extends AppCompatActivity {
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File from      = new File(photoPath);
+        if(location != null){
+        longitude =location.getLongitude();
+        latitude =location.getLatitude();
+        }
         File to        = new File(directory, newName.trim() +
                                 "_lat:" + Double.toString(latitude) + ",lon:" +
                                 Double.toString(longitude) + ",date:" + date + ".jpeg");

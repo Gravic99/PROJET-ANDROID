@@ -17,7 +17,7 @@ public class NotificationCreator {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "42")
                 .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                 .setContentTitle("QwikPik")
-                .setContentText("Souvenir à revoir! "+text)
+                .setContentText("Souvenir à revoir! La photo : "+text.substring(0,text.indexOf("_lat:"))+" a été prise près d'ici!")
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         return builder.build();
