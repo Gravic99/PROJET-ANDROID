@@ -34,8 +34,10 @@ public class GalleryRecyclerView extends RecyclerView.Adapter<GalleryRecyclerVie
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ImageViewHolder holder, final int position) {
        final Picture pictureToDisplay = pictureDataSet.get(position);
+
+
         holder.textViewTitle.setText(pictureToDisplay.getTitle().substring(0,pictureToDisplay.getTitle().indexOf("_lat:")));
         holder.imageViewImageGallery.setImageBitmap(pictureToDisplay.getImage());
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +77,10 @@ public class GalleryRecyclerView extends RecyclerView.Adapter<GalleryRecyclerVie
             @Override
             public void onClick(View v) {
                 EditText editTextName = dialog.findViewById(R.id.editTextName);
-                renamePicture(editTextName.getText().toString(),picture);
+              String newTitle =  renamePicture(editTextName.getText().toString(),picture);
+                pictureDataSet.get(position).setTitle(newTitle);
                 notifyItemChanged(position);
+
 
                 dialog.dismiss();
             }
@@ -91,13 +95,14 @@ public class GalleryRecyclerView extends RecyclerView.Adapter<GalleryRecyclerVie
         dialog.show();
     }
 
-    private void renamePicture(String newName, Picture picture){
+    private String renamePicture(String newName, Picture picture){
 
         File directory = picture.getDirectory();
         File from      = new File(picture.getPicturePath());
-        Log.d("index",Integer.toString(picture.getTitle().indexOf("_lat:")));
-        Log.d("title",picture.getTitle());
-        File to        = new File(directory, newName.trim() + picture.getTitle().substring(picture.getTitle().indexOf("_lat:")));
+        String Name = newName.trim() + picture.getTitle().substring(picture.getTitle().indexOf("_lat:"));
+
+        File to        = new File(directory, Name);
         from.renameTo(to);
+        return Name;
     }
 }

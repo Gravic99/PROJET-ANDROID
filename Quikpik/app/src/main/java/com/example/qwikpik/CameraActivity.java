@@ -70,9 +70,6 @@ public class CameraActivity extends AppCompatActivity {
                 ImageView_Picture.setImageBitmap(bitmap);
             }
         }
-        else{
-             Toast.makeText(this,"no", Toast.LENGTH_SHORT).show();
-        }
 
     }
 
