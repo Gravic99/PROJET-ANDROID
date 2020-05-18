@@ -38,7 +38,7 @@ public class GalleryRecyclerView extends RecyclerView.Adapter<GalleryRecyclerVie
        final Picture pictureToDisplay = pictureDataSet.get(position);
 
 
-        holder.textViewTitle.setText(pictureToDisplay.getTitle().substring(0,pictureToDisplay.getTitle().indexOf("_lat:")));
+        holder.textViewTitle.setText(pictureToDisplay.getTitle().substring(0,pictureToDisplay.getTitle().lastIndexOf("_lat:")));
         holder.imageViewImageGallery.setImageBitmap(pictureToDisplay.getImage());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +96,10 @@ public class GalleryRecyclerView extends RecyclerView.Adapter<GalleryRecyclerVie
     }
 
     private String renamePicture(String newName, Picture picture){
-
+        newName  = newName.replaceAll("\\W", "");
         File directory = picture.getDirectory();
         File from      = new File(picture.getPicturePath());
-        String Name = newName.trim() + picture.getTitle().substring(picture.getTitle().indexOf("_lat:"));
-
+        String Name = newName.trim() + picture.getTitle().substring(picture.getTitle().lastIndexOf("_lat:"));
         File to        = new File(directory, Name);
         from.renameTo(to);
         return Name;

@@ -8,4 +8,5 @@
     <string name="imageView_Picture_contentDesc">Image</string>
     <string name="name">name</string>
     <string name="save">Save</string>
+    <string name="les_caract_res_sp_ciaux_ne_sont_pas_accept">* Les caractères spéciaux ne sont pas accepté</string>
 </resources>

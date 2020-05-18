@@ -153,8 +153,8 @@ public class NotificationService extends Service {
                 locate.setLongitude(0);
             }
             else {
-                locate.setLatitude(Double.parseDouble(toDecrypt.substring(toDecrypt.indexOf("_lat:") + 5, toDecrypt.indexOf(",lon:"))));
-                locate.setLongitude(Double.parseDouble(toDecrypt.substring(toDecrypt.indexOf(",lon:") + 5, toDecrypt.indexOf(",date:"))));
+                locate.setLatitude(Double.parseDouble(toDecrypt.substring(toDecrypt.lastIndexOf("_lat:") + 5, toDecrypt.lastIndexOf(",lon:"))));
+                locate.setLongitude(Double.parseDouble(toDecrypt.substring(toDecrypt.lastIndexOf(",lon:") + 5, toDecrypt.lastIndexOf(",date:"))));
             }
             picturePositions[i] = locate;
 

@@ -39,4 +39,14 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnCancel"
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+
+    <TextView
+        android:id="@+id/textView_noSpecialCaracter"
+        android:layout_width="200dp"
+        android:layout_height="44dp"
+        android:text="@string/les_caract_res_sp_ciaux_ne_sont_pas_accept"
+        app:layout_constraintBottom_toTopOf="@+id/editTextName"
+        app:layout_constraintEnd_toEndOf="@+id/editTextName"
+        app:layout_constraintStart_toStartOf="@+id/editTextName" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

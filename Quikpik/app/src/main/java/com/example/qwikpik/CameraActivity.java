@@ -160,13 +160,14 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void renamePicture(String newName){
-        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File from      = new File(photoPath);
         if(location != null){
         longitude =location.getLongitude();
         latitude =location.getLatitude();
         }
+        newName = newName.replaceAll("\\W", "");
         File to        = new File(directory, newName.trim() +
                                 "_lat:" + Double.toString(latitude) + ",lon:" +
                                 Double.toString(longitude) + ",date:" + date + ".jpeg");
